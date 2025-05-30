@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cool Weather App</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #6dd5ed, #2193b0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #ffffff;
+    }
+
+    .weather-container {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 300px;
+    }
+
+    .weather-container input {
+      padding: 0.5rem;
+      border: none;
+      border-radius: 10px;
+      width: 80%;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .weather-container button {
+      padding: 0.5rem 1rem;
+      background-color: #ffffff;
+      color: #2193b0;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .weather-container button:hover {
+      background-color: #e0f7fa;
+    }
+
+    .temperature {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="weather-container">
+    <h2>Weather Checker</h2>
+    <input type="text" id="locationInput" placeholder="Enter location" />
+    <br />
+    <button onclick="getWeather()">Get Temperature</button>
+    <div class="temperature" id="tempDisplay"></div>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const location = document.getElementById("locationInput").value;
+      if (!location) {
+        alert("Please enter a location");
+        return;
+      }
+
+      const apiKey = "d8c872cd3b3a4fa88b632325251004";
+      const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(location)}&aqi=yes`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Weather data not found");
+        }
+        const data = await response.json();
+        const tempC = data.current.temp_c;
+        document.getElementById("tempDisplay").innerText = `Temperature: ${tempC}°C`;
+      } catch (error) {
+        document.getElementById("tempDisplay").innerText = "Error fetching weather data.";
+      }
+    }
+  </script>
+</body>
+</html>
